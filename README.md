@@ -2,53 +2,59 @@
 
 A hands-on collection of digital logic designs written in Verilog HDL while building a foundation for RTL Design and Design Verification.
 
-## Topics covered
+## Designs currently included
 
-- Combinational logic: AND gate, multiplexers, decoder, encoder, priority encoder, comparator
-- Arithmetic circuits: half adder, full adder, 4-bit ripple-carry adder, 4-bit ALU
-- Sequential logic: D, JK, SR and T flip-flops; 4-bit register; shift register
-- Counters: 8-bit counter, enabled counter, 4-bit up/down counter, saturating counters
-- Control logic: traffic-light controller
-- Datapath building block: 8-bit barrel shifter
+- AND gate
+- 4-bit ALU (ADD, SUB, AND, OR)
+- 4-bit comparator
+- 2-to-4 decoder
+- 4-to-2 encoder
+- Priority encoder with valid output
+- Half adder and full adder
+- 4-to-1 multiplexer
+- 4-bit ripple-carry adder
+- 8-bit barrel shifter (three-stage, shift-by-1/2/4 architecture)
+
+Each design is kept in a separate Verilog source file. Available testbenches use a mix of directed stimulus and self-checking comparisons.
 
 ## Tools
 
 - Verilog HDL
-- Icarus Verilog (simulation)
-- GTKWave (waveform inspection)
-
-## Repository layout
-
-RTL modules and their testbenches are kept as separate `.v` files. Testbenches are named with the `_tb.v` suffix.
+- Icarus Verilog for simulation
+- GTKWave for waveform inspection
 
 ## Running a simulation
 
-Compile a design together with its testbench. For example:
+Compile a design with its testbench:
 
 ```bash
 iverilog -g2012 -o sim halfadder.v halfadder_tb.v
 vvp sim
 ```
 
-For a design that instantiates another module, include every required RTL source file. For example, the ripple-carry adder also needs `full_adder.v`:
+For a design that instantiates another module, include the required RTL source files. The ripple-carry adder uses `full_adder.v`:
 
 ```bash
 iverilog -g2012 -o sim full_adder.v ripple_carry_adder4bit.v ripple_carry_adder4bit_tb.v
 vvp sim
 ```
 
-Open a generated waveform with:
+Open a generated waveform:
 
 ```bash
 gtkwave halfadder.vcd
 ```
 
-## Verification notes
+## Verification status
 
-Some testbenches use directed stimulus and waveform/console monitoring. Others use self-checking comparisons and pass/fail counters. A testbench being present does not by itself mean the design has been exhaustively verified.
+- The half-adder testbench checks all four input combinations with a self-checking comparison.
+- The priority-encoder testbench checks all 16 input combinations.
+- The ripple-carry-adder testbench checks all 512 combinations of its two 4-bit operands and carry-in.
+- Several other testbenches currently use directed stimulus and waveform/console monitoring rather than self-checking assertions.
+- The barrel-shifter RTL is present; a dedicated testbench is still pending.
 
-The barrel shifter RTL is included; its dedicated testbench is still pending. Simulation results should be reported only after running the corresponding testbench.
+These are source-level project notes. Run the simulations locally before treating a design as verified. No synthesis or FPGA implementation results are claimed here.
 
-## Current focus
+## Current learning focus
 
-Strengthening RTL fundamentals, writing independent testbenches, debugging corner cases, and learning to explain design decisions clearly.
+Strengthening RTL fundamentals, writing independent testbenches, debugging corner cases, and explaining design decisions clearly.
